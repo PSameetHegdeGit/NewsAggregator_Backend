@@ -10,6 +10,9 @@ from NewsApiLibrary import *
 
 sourcesAndArticles = {}
 
+@app.route("/")
+def landing():
+    return render_template("landing.html")
 
 @app.route("/display_content/<searchFor>&<sources>&<language>&<method>", methods=["GET", "POST"])
 def display_content(searchFor, sources, language, method):
@@ -37,7 +40,8 @@ def display_content(searchFor, sources, language, method):
     except:
         abort(404)
 
-
+if __name__ == '__main__':
+    app.run()
 
 
 
