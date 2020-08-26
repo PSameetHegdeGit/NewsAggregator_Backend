@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, abort
 from flask_cors import CORS
 
+import pprint
+
 import utilities
+
+from pymongo import *
 
 app = Flask(__name__)
 CORS(app)
@@ -9,10 +13,34 @@ CORS(app)
 from NewsApiLibrary import *
 
 sourcesAndArticles = {}
+client = MongoClient('mongodb+srv://admin:<newsaggregatoradministrator>@newsaggregatordb.tsujr.mongodb.net/<NewsAggregatorDB>?retryWrites=true&w=majority')
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def landing():
-    return render_template("landing.html")
+    print("in Landing")
+    if request.method == "POST":
+        test = request.form['test']
+        todo = request.form['todo']
+
+        if todo == 'insert':
+            print("in todo")
+            post = {'info': test}
+            try:
+                client.list_database_names()
+                print('Successfully inserted?')
+            except:
+                print('ERROR')
+        elif todo == 'get':
+            try:
+                pass
+            except:
+                print('ERROR')
+
+
+        return redirect(url_for('landing'))
+
+    else:
+        return render_template("landing.html")
 
 @app.route("/display_content/<searchFor>&<sources>&<language>&<method>", methods=["GET", "POST"])
 def display_content(searchFor, sources, language, method):
